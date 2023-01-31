@@ -1,15 +1,26 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose")
 const server = express();
-const {listBankController,createBankController,updateBankController,deleteBankController} = require("./public/controllers")
+const accountRoutes = require("./routes/account")
+const bankRoutes = require("./routes/account")
+const userRoutes = require("./routes/user")
+
 
 server.use(bodyParser.json());
 
-server.get("/bank", listBankController);
-server.post("/bank", createBankController);
-server.put("/bank", updateBankController);
-server.delete("/bank", deleteBankController);
+server.use(accountRoutes)
+server.use(bankRoutes)
+server.use(userRoutes)
 
-server.listen(3000, "localhost", () => {
-  console.log("server is good to go");
-});
+// connect to database
+mongoose.connect(
+  "mongodb+srv://bank-project:eraso1122@cluster0.pk0dpns.mongodb.net/?retryWrites=true&w=majority",
+  {useNewUrlParser : true, useUnifiedTopology: true}
+).then(result => {
+     server.listen(3400, "localhost", () => {
+       console.log("server is good to go");
+     });
+}).catch(err => console.log(err))
+
+
